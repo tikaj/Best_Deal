@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Airbnb Analytics</title>
+  <style>
+  table {
+    font-family: arial, sans-serif;
+    font-size: 12px;
+    border-collapse: collapse;
+    margin: 20px
+  }
+
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+
+  tr:nth-child(even) {
+    background-color: #dddddd;
+  }
+  </style>
+</head>
+
+<body>
+
+<h3> Airbnb Price Analytics </h3>
+<p> Listing prices for 40 European cities from 2015 to 2020 (4 Billion prices) </p>
+
+<form action ="/" method="post">
+  <select name=selected_city>
+    {% for city in cities %}
+      <option value= "{{ city }}"> {{ city }} </option>"
+    {% endfor %}
+  </select>
+  <input type="submit" value="Submit">
+</form>
+
+<form action ="/" method="post">
+  <select name=month>
+    {% for month in months %}
+    <option value= "{{ month }}"> {{ month }} </option>"
+    {% endfor %}
+  </select>
+  <input type="submit" value="Submit">
+</form>
+
+{% if city_price_timeline_dashboard %}
+ <table style="border: 1px">
+   <tr style="background-color: lightblue;">
+     <th colspan="2">Price per City</th>
+   </tr>
+   <tr>
+     <th>month</th>
+     <th>median price</th>
+   </tr>
+  {% for row in city_price_timeline_dashboard %}
+    <tr>
+      <td>{{ row[0] }}</td>
+      <td>${{ row[1] }}</td>
+    </tr>
+  {% endfor %}
+ </table>
+{% endif %}
+
+{% if cheapest_city_for_month %}
+ <table style="border: 1px">
+   <tr style="background-color: lightblue;">
+     <th colspan="2">Cheapest Cities per Month</th>
+   </tr>
+   <tr>
+     <th>month</th>
+     <th>median price</th>
+   </tr>
+  {% for row in cheapest_city_for_month %}
+    <tr>
+      <td>{{ row[0] }}</td>
+      <td>${{ row[1] }}</td>
+    </tr>
+  {% endfor %}
+ </table>
+{% endif %}
+
+
+
+
+
+</select>
+</body>
+</html>
