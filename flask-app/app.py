@@ -130,3 +130,7 @@ def get_cheapest_city_bath_bed(city, bathrooms, bedrooms):
     app.logger.info(query)
     res = get_sql_engine().execute(query)
     return list(res)
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=80, debug=True)
