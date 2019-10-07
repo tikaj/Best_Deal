@@ -37,9 +37,18 @@ def home():
               'May': 5, 'Jun': 6, 'Jul': 7, 'Aug': 8,
               'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12}
 
+    bathrooms = ['0', '0.5', '1.0', '1.5', '2.0', '2.5',
+                 '3.0', '3.5', '4.0', '5.0', '8.0']
+
+    bedrooms = ['0', '1', '2', '3', '4', '5', '6', '7', '8']
+
     city_price_timeline_dashboard = None
     cheapest_city_for_month = None
+    test_dashboard = None
 
+    app.logger.info('--------')
+    app.logger.info(request.form)
+    app.logger.info('--------')
     if request.method == 'POST':
         if 'selected_city' in request.form:
             city = request.form['selected_city']
@@ -50,13 +59,25 @@ def home():
             app.logger.info('selected month is %s' % month)
             month_id = months[month]
             cheapest_city_for_month = get_cheapest_city_for_month(month_id)
+        if 'city' in request.form and 'bathrooms' in request.form and 'bedrooms' in request.form:
+            selected_city = request.form['city']
+            selected_bathrooms = request.form['bathrooms']
+            selected_bedrooms = request.form['bedrooms']
+            app.logger.info('selected city is: %s' % selected_city)
+            app.logger.info('selected bathrooms is: %s' % selected_bathrooms)
+            app.logger.info('selected bedrooms is: %s' % selected_bedrooms)
+            test_dashboard = get_cheapest_city_bath_bed(selected_city, selected_bathrooms, selected_bedrooms)
+            app.logger.info(test_dashboard)
 
     return render_template(
         'index.html',
         cities=cities,
         months=months.keys(),
+        bathrooms=bathrooms,
+        bedrooms=bedrooms,
         city_price_timeline_dashboard=city_price_timeline_dashboard,
-        cheapest_city_for_month=cheapest_city_for_month
+        cheapest_city_for_month=cheapest_city_for_month,
+        test_dashboard=test_dashboard
     )
 
 
@@ -94,5 +115,18 @@ def get_cheapest_city_for_month(month_id):
          ORDER by 2
        );
     ''' % month_id
+    res = get_sql_engine().execute(query)
+    return list(res)
+
+
+def get_cheapest_city_bath_bed(city, bathrooms, bedrooms):
+    query = '''
+    SELECT month, median(price)::int
+    FROM calendar_listing
+    WHERE city=LOWER('%s') and bathrooms='%s' and bedrooms='%s'
+    group by 1
+    ORDER BY 1;
+    ''' % (city, bathrooms, bedrooms)
+    app.logger.info(query)
     res = get_sql_engine().execute(query)
     return list(res)

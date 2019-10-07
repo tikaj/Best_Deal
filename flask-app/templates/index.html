@@ -1,5 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
+	<body>
+		<img src="https://images-na.ssl-images-amazon.com/images/I/51YP0FU1yFL._SX425_.jpg"
+             alt="Girl in a jacket", style="float:right;width:180px;height:180px;">
+    </body>
+	<body>
+		<!-- <div style="border: 1px solid black">MonitorBnB</div> -->
+		<div style="background-color:red;color:white;padding:2px;">
+  <h2>MonitorBnB</h2> </div>
+  	<h3> Plan your vacation with monitoring historical Airbnb date in 40 European cities!</h3>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+/* Create three equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 20%;
+  padding: 10px;
+  height: 1300px; /* Should be removed. Only for demonstration */
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+</style>
+</head>
+
+
+<div class="row">
+  <div class="column" style="background-color:white;">
+        <h4>Austria</h4>
+    <ul>
+      <li>vienna</li>
+    </ul>
+
+    <h4>Belgium</h4>
+
+    <ul>
+      <li>Antwerp</li>
+      <li>Brussels</li>
+      <li>Ghent</li>
+    </ul>
+
+    <h4>Denmark</h4>
+    <ul>
+      <li>Copenhagen</li>
+    </ul>
+
+    <h4>France</h4>
+
+    <ul>
+       <li>Bordeaux</li>
+       <li>Lyon</li>
+       <li>Paris</li>
+
+     </ul>
+    <h4>Germany</h4>
+
+    <ul>
+       <li>Berlin</li>
+
+     </ul>
+  <h4>Greece</h4>
+
+  <ul>
+     <li>Athens</li>
+     <li>Crete</li>
+   </ul>
+
+  <h4>Ireland</h4>
+
+  <ul>
+     <li>Dublin</li>
+   </ul>
+<!--  </div>-->
+<!--   <div class="column" style="background-color:#ccffff;">-->
+
+  <h4>Italy</h4>
+
+  <ul>
+     <li>Bergamo</li>
+     <li>Bologna</li>
+     <li>Florence</li>
+     <li>Milan</li>
+     <li>Naples</li>
+     <li>Puglia</li>
+     <li>Rome</li>
+     <li>Sicily</li>
+
+   </ul>
+
+   <h4>Spain</h4>
+
+  <ul>
+     <li>Barcelona</li>
+     <li>Euskadi</li>
+     <li>Girona</li>
+     <li>Madrid</li>
+     <li>Malaga</li>
+     <li>Mallorca</li>
+     <li>Menorca</li>
+   </ul>
+
+   <h4>Switzerland</h4>
+
+  <ul>
+     <li>Geneva</li>
+
+   </ul>
+
+   <h4>United-kingdom</h4>
+
+  <ul>
+     <li>Bristol</li>
+     <li>Edinburgh</li>
+     <li>Manchester</li>
+     <li>London</li>
+   </ul>
+  </div>
+</body>
+
+<!--************************************************************-->
+
 <head>
   <meta charset="UTF-8">
   <title>Airbnb Analytics</title>
@@ -22,70 +151,149 @@
   }
   </style>
 </head>
-
+<!--****************************************************************-->
 <body>
+<!--<h3> Airbnb Price Analytics </h3>-->
+<!--<p> Listing prices for 40 European cities from 2015 to 2020 (4 Billion prices) </p>-->
+<!--****************************************************************-->
+  <div class="column" style="background-color:#ffffff;">
+  <form action ="/" method="post">
+    <select name=selected_city>
+      {% for city in cities %}
+        <option value= "{{ city }}"> {{ city }} </option>"
+      {% endfor %}
+    </select>
+    <input type="submit" value="Submit">
+  </form>
 
-<h3> Airbnb Price Analytics </h3>
-<p> Listing prices for 40 European cities from 2015 to 2020 (4 Billion prices) </p>
-
-<form action ="/" method="post">
-  <select name=selected_city>
-    {% for city in cities %}
-      <option value= "{{ city }}"> {{ city }} </option>"
+  {% if city_price_timeline_dashboard %}
+   <table style="border: 1px">
+     <tr style="background-color: lightblue;">
+       <th colspan="2">Price per City</th>
+     </tr>
+     <tr>
+       <th>month</th>
+       <th>median price</th>
+     </tr>
+    {% for row in city_price_timeline_dashboard %}
+      <tr>
+        <td>{{ row[0] }}</td>
+        <td>${{ row[1] }}</td>
+      </tr>
     {% endfor %}
-  </select>
-  <input type="submit" value="Submit">
-</form>
+   </table>
+  {% endif %}
+  </div>
+<!--****************************************************************-->
+  <div class="column" style="background-color:#ffffff;">
+  <form action ="/" method="post">
+    <select name=month>
+      {% for month in months %}
+      <option value= "{{ month }}"> {{ month }} </option>"
+      {% endfor %}
+    </select>
+    <input type="submit" value="Submit">
+  </form>
 
-<form action ="/" method="post">
-  <select name=month>
-    {% for month in months %}
-    <option value= "{{ month }}"> {{ month }} </option>"
+  {% if cheapest_city_for_month %}
+   <table style="border: 1px">
+     <tr style="background-color: lightblue;">
+       <th colspan="2">Cheapest Cities per Month </th>
+     </tr>
+     <tr>
+       <th>month</th>
+       <th>median price</th>
+     </tr>
+    {% for row in cheapest_city_for_month %}
+      <tr>
+        <td>{{ row[0] }}</td>
+        <td>${{ row[1] }}</td>
+      </tr>
     {% endfor %}
-  </select>
-  <input type="submit" value="Submit">
-</form>
+   </table>
+  {% endif %}
+  </div>
+<!--****************************************************************-->
+  <div class="column" style="background-color:#ffffff;">
+  <form action ="/" method="post">
+    Select the city:
+    <select name=city>
+      {% for city in cities %}
+        <option value= "{{ city }}"> {{ city }} </option>"
+      {% endfor %}
+    </select>
 
-{% if city_price_timeline_dashboard %}
- <table style="border: 1px">
-   <tr style="background-color: lightblue;">
-     <th colspan="2">Price per City</th>
-   </tr>
-   <tr>
-     <th>month</th>
-     <th>median price</th>
-   </tr>
-  {% for row in city_price_timeline_dashboard %}
-    <tr>
-      <td>{{ row[0] }}</td>
-      <td>${{ row[1] }}</td>
-    </tr>
-  {% endfor %}
- </table>
-{% endif %}
+    Number of Bathrooms:
+    <select name=bathrooms>
+      {% for bathroom in bathrooms %}
+        <option value= "{{ bathroom }}"> {{ bathroom }} </option>"
+      {% endfor %}
+    </select>
+    Number of Bedrooms:
+    <select name=bedrooms>
+      {% for bedroom in bedrooms %}
+        <option value= "{{ bedroom }}"> {{ bedroom }} </option>"
+      {% endfor %}
+    </select>
+    <input type="submit" value="Submit">
+  </form>
 
-{% if cheapest_city_for_month %}
- <table style="border: 1px">
-   <tr style="background-color: lightblue;">
-     <th colspan="2">Cheapest Cities per Month</th>
-   </tr>
-   <tr>
-     <th>month</th>
-     <th>median price</th>
-   </tr>
-  {% for row in cheapest_city_for_month %}
-    <tr>
-      <td>{{ row[0] }}</td>
-      <td>${{ row[1] }}</td>
-    </tr>
-  {% endfor %}
- </table>
-{% endif %}
+  {% if test_dashboard %}
+   <table style="border: 1px">
+     <tr style="background-color: lightblue;">
+       <th colspan="2">Price per Month</th>
+     </tr>
+     <tr>
+       <th>month</th>
+       <th>median price</th>
+     </tr>
+    {% for row in test_dashboard %}
+      <tr>
+        <td>{{ row[0] }}</td>
+        <td>${{ row[1] }}</td>
+      </tr>
+    {% endfor %}
+   </table>
+  {% endif %}
 
-
-
-
+  </div>
 
 </select>
 </body>
+<!--************************************************************************-->
+
+<!--<body>-->
+<!--<head>-->
+<!--<meta charset='utf-8' />-->
+<!--<title>Display a map</title>-->
+<!--<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />-->
+<!--<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.2/mapbox-gl.js'></script>-->
+<!--<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.2/mapbox-gl.css' rel='stylesheet' />-->
+<!--<style>-->
+<!--body { margin:25px; padding:0; }-->
+<!--/*#map { position:absolute; top:0; bottom:0; width:50%; }*/-->
+<!--#map {height:400px; width: 50%; top:0px; }-->
+
+<!--</style>-->
+<!--</head>-->
+<!--<div id='map'></div>-->
+<!--<script>-->
+<!--mapboxgl.accessToken = 'pk.eyJ1IjoidGlrYWoiLCJhIjoiY2sxYmU3czJqMDJ1MTNibnltenlvam9iMyJ9.8tpx2R8MvCdepkv-xOkNBg';-->
+<!--var map = new mapboxgl.Map({-->
+<!--container: 'map', // container id-->
+<!--style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location-->
+<!--center: [-74.50, 40], // starting position [lng, lat]-->
+<!--zoom: 9 // starting zoom-->
+<!--});-->
+<!--</script>-->
+
+</body>
+
+
+
+
+
 </html>
+
+
+
