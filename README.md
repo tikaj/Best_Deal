@@ -6,7 +6,7 @@ For example you might not care much between visiting London or Paris or also bet
 Data is complied from http://insideairbnb.com/get-the-data.html. More than 2300 csv files; calendar.csv and listings.csv files of 40 European cities  with data capacity of 230 GB are used for this project.
 
 ## Tech Stack
-https://github.com/tikaj/Best_Deal/blob/master/tech-stack.001.jpeg
+![Tech Stack](https://github.com/tikaj/Best_Deal/blob/master/tech-stack.001.jpeg)
 
 ## Demo Link
 https://www.datamaster.dev
