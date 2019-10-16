@@ -9,6 +9,6 @@ Data is complied from http://insideairbnb.com/get-the-data.html. More than 2300 
 https://www.datamaster.dev
 
 ## Tech Stack
-![Tech Stack](https://github.com/tikaj/Best_Deal/blob/master/tech-stack.001.jpeg)
+![Tech Stack](https://github.com/tikaj/Best_Deal/blob/master/tech-stack.png)
 
 
