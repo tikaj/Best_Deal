@@ -46,10 +46,10 @@ def home():
               'May': 5, 'Jun': 6, 'Jul': 7, 'Aug': 8,
               'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12}
 
-    bathrooms = ['0', '0.5', '1.0', '1.5', '2.0', '2.5',
-                 '3.0', '3.5', '4.0', '5.0', '8.0']
+    bedrooms = ['1', '2', '3', '4', '5', '6', '7', '8']
 
-    bedrooms = ['0', '1', '2', '3', '4', '5', '6', '7', '8']
+    bathrooms = ['0.5', '1.0', '1.5', '2.0', '2.5',
+                 '3.0', '3.5', '4.0', '5.0', '8.0']
 
     city_price_timeline_dashboard = None
     cheapest_city_for_month = None
@@ -112,7 +112,7 @@ def get_city_price_timeline_dashboard(city):
        );
     ''' % city
     res = get_sql_engine().execute(query)
-    return list(res)
+    return [(month_name_to_id[row[0]], row[1]) for row in res]
 
 
 def get_cheapest_city_for_month(month_id):

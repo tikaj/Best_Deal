@@ -3,8 +3,6 @@
 <meta charset="UTF-8">
 <title>Airbnb Analytics</title>
 <head>
-  <img src="https://images-na.ssl-images-amazon.com/images/I/51YP0FU1yFL._SX425_.jpg"
-             alt="Girl in a jacket", style="float:right;width:180px;height:180px;">
   <style>
     * {
       box-sizing: border-box;
@@ -40,14 +38,37 @@
     tr:nth-child(even) {
       background-color: #dddddd;
     }
+
+    h4 {
+      margin-top: -5px;
+      margin-bottom: -5px;
+    }
+
+    h2 {
+      margin-top: 0px;
+    }
+
+    .small-top-bottom-margin {
+      margin-top: 5px;
+      margin-bottom: 0px;
+    }
+    img {
+      height: 100px;
+    }
+    h1 {
+      background-color: #f19e64;
+    }
   </style>
 </head>
 <body>
-  <div style="background-color:red;color:white;padding:2px;">
-  <h2>MonitorBnB</h2> </div>
+  <h1>
+    <img src="https://images-na.ssl-images-amazon.com/images/I/51YP0FU1yFL._SX425_.jpg">
+    MonitorBnB
+  </h1>
   <h3> Plan your vacation with monitoring historical Airbnb date in 40 European cities!</h3>
   <div class="row">
-  <div class="column" style="background-color:white;">
+  <div class="column" style="background-color:beige;">
+    <h2>List of Cities</h2>
     <h4>Austria</h4>
     <ul>
       <li>vienna</li>
@@ -127,7 +148,7 @@
   {% if city_price_timeline_dashboard %}
    <table style="border: 1px">
      <tr style="background-color: lightblue;">
-       <th colspan="2">Price per City</th>
+       <th colspan="2">{{ selected_city }}</th>
      </tr>
      <tr>
        <th>month</th>
@@ -156,7 +177,7 @@
   {% if cheapest_city_for_month %}
    <table style="border: 1px">
      <tr style="background-color: lightblue;">
-       <th colspan="2">Cheapest Cities per Month </th>
+       <th colspan="2">Cheapest Cities in {{ selected_month }}</th>
      </tr>
      <tr>
        <th>month</th>
@@ -174,34 +195,39 @@
 <!--****************************************************************-->
   <div class="column" style="background-color:#ffffff;">
   <form action ="/" method="post">
-    Select the city:
+    <p class="small-top-bottom-margin">Select the city:</p>
     <select name=city>
       {% for city in cities %}
         <option value= "{{ city }}"> {{ city }} </option>"
       {% endfor %}
     </select>
 
-    Number of Bathrooms:
-    <select name=bathrooms>
-      {% for bathroom in bathrooms %}
-        <option value= "{{ bathroom }}"> {{ bathroom }} </option>"
-      {% endfor %}
-    </select>
-    Number of Bedrooms:
+    <p class="small-top-bottom-margin">Number of Bedrooms:</p>
     <select name=bedrooms>
       {% for bedroom in bedrooms %}
         <option value= "{{ bedroom }}"> {{ bedroom }} </option>"
       {% endfor %}
     </select>
+
+    <p class="small-top-bottom-margin">Number of Bathrooms:</p>
+    <select name=bathrooms>
+      {% for bathroom in bathrooms %}
+        <option value= "{{ bathroom }}"> {{ bathroom }} </option>"
+      {% endfor %}
+    </select>
+
     <input type="submit" value="Submit">
   </form>
 
   {% if test_dashboard %}
-   <h4>{{ selected_city}}_{{ selected_bathrooms }}_{{ selected_bedrooms }}</h4>
    <table style="border: 1px">
-     <tr style="background-color: lightblue;">
-       <th colspan="2">Price per Month</th>
-     </tr>
+       <tr style="background-color: lightblue;">
+         <th colspan="2">
+           city: {{selected_city}}
+           bedrooms: {{ selected_bedrooms }}
+           bathrooms: {{ selected_bathrooms }}
+         </th>
+       </tr>
      <tr>
        <th>month</th>
        <th>median price</th>
