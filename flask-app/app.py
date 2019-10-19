@@ -1,8 +1,12 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_from_directory
 import sqlalchemy
 import os
 
 app = Flask(__name__)
+
+month_name_to_id = {1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr',
+                    5: 'May', 6: 'Jun', 7: 'Jul', 8: 'Aug',
+                    9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'}
 
 
 def get_sql_engine():
@@ -14,6 +18,11 @@ def get_sql_engine():
     connection = 'postgresql://%s:%s@%s:%s/%s' % (user, password, server, port, database_name)
     sql_engine = sqlalchemy.create_engine(connection)
     return sql_engine
+
+
+@app.route('/.well-known/pki-validation/<path:path>')
+def send_static(path):
+    return send_from_directory('.well-known/pki-validation', path)
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -46,18 +55,20 @@ def home():
     cheapest_city_for_month = None
     test_dashboard = None
 
-    app.logger.info('--------')
-    app.logger.info(request.form)
-    app.logger.info('--------')
+    selected_month = None
+    selected_city = None
+    selected_bedrooms = None
+    selected_bathrooms = None
+
     if request.method == 'POST':
         if 'selected_city' in request.form:
-            city = request.form['selected_city']
-            app.logger.info('selected city is: %s' % city)
-            city_price_timeline_dashboard = get_city_price_timeline_dashboard(city)
+            selected_city = request.form['selected_city']
+            app.logger.info('selected city is: %s' % selected_city)
+            city_price_timeline_dashboard = get_city_price_timeline_dashboard(selected_city)
         if 'month' in request.form:
-            month = request.form['month']
-            app.logger.info('selected month is %s' % month)
-            month_id = months[month]
+            selected_month = request.form['month']
+            app.logger.info('selected month is %s' % selected_month)
+            month_id = months[selected_month]
             cheapest_city_for_month = get_cheapest_city_for_month(month_id)
         if 'city' in request.form and 'bathrooms' in request.form and 'bedrooms' in request.form:
             selected_city = request.form['city']
@@ -75,6 +86,10 @@ def home():
         months=months.keys(),
         bathrooms=bathrooms,
         bedrooms=bedrooms,
+        selected_city=selected_city,
+        selected_bedrooms=selected_bedrooms,
+        selected_bathrooms=selected_bathrooms,
+        selected_month=selected_month,
         city_price_timeline_dashboard=city_price_timeline_dashboard,
         cheapest_city_for_month=cheapest_city_for_month,
         test_dashboard=test_dashboard
@@ -108,7 +123,7 @@ def get_cheapest_city_for_month(month_id):
        FROM (
          SELECT
            city,
-           median(price) AS median_price
+           MEDIAN(price) AS median_price
          FROM calendar_listing
          WHERE month = '%s'
          GROUP by 1
@@ -123,14 +138,18 @@ def get_cheapest_city_bath_bed(city, bathrooms, bedrooms):
     query = '''
     SELECT month, median(price)::int
     FROM calendar_listing
-    WHERE city=LOWER('%s') and bathrooms='%s' and bedrooms='%s'
-    group by 1
+    WHERE city=LOWER('%s') AND bathrooms='%s' AND bedrooms='%s'
+    GROUP BY 1
     ORDER BY 1;
     ''' % (city, bathrooms, bedrooms)
     app.logger.info(query)
     res = get_sql_engine().execute(query)
-    return list(res)
+    return [(month_name_to_id[row[0]], row[1]) for row in res]
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=80, debug=True)
+    if os.environ.get('TEST_ENV'):
+        app.run(host="localhost", port=8888, debug=True)
+    else:
+        '''on production server, actual certificate is used'''
+        app.run(host="0.0.0.0", port=443, ssl_context=('www_datamaster_dev.crt', 'private-key.pem'))
