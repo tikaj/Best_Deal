@@ -12,21 +12,4 @@ https://www.datamaster.dev
 ## Tech Stack
 ![Tech Stack](https://github.com/tikaj/Best_Deal/blob/master/tech-stack.png)
 
-*Airbnb data source*
-http://insideairbnb.com/get-the-data.html
-
-Setting up HTTPS
---- 
-
-On EC2 Box:
----
-$ pip3 install pyopenssl
-$  openssl genrsa 2048 > private-key.pem
-$  openssl req -new -key private-key.pem -out csr.pem
-
-Purchased an SSL Certificate from NameCheap.
-   - Used the csr.pem created above as the CSR code
-   - Used HTTP DCV method for verification.
-   - After verification, downloaded the actual certificate that is used 
-     in the app.py 
  
